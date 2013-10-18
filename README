@@ -1,0 +1,14 @@
+Petit projet pour piloter une lyre avec une souris.
+
+L'image projetée se comportant comme une "curseur géant".
+
+# Matériel utilisé
+
+ * une carte Raspberry-Pi pour la gestion de la souris et le son
+ * une carte Arduino(ou compatible) pour l'envoi des commandes DMX vers la lyre
+ * un shield d'adaptation de niveau de l'UART arduino vers DMX
+
+# Software
+
+ * Python et la lib Pygame pour la gestion de la souris et du son
+ * Arduino avec la lib DmxSimple
