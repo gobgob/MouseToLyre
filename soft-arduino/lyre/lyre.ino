@@ -11,11 +11,6 @@
 
 void setup() {
 	Serial.begin(9600);
-	Serial.println("SerialToDmx ready");
-	Serial.println();
-	Serial.println("Syntax:");
-	Serial.println(" 123c : use DMX channel 123");
-	Serial.println(" 45w  : set current channel to value 45");
 }
 
 int value = 0;
@@ -41,7 +36,10 @@ void loop()
 		else if (c=='w')
 		{
 			DmxSimple.write(channel, value);
-			Serial.println("");
+		}
+		else if (c=='?')
+		{
+			Serial.print("I am the One");
 		}
 		value = 0;
 	}
