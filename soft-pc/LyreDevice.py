@@ -21,6 +21,7 @@ class LyreDevice:
     MIN_PAN=0
 
     INTENSITY=20
+    FOCUS=20
 
     DMX_TILT_1 = 1
     DMX_TILT_2 = 14
@@ -29,6 +30,7 @@ class LyreDevice:
     DMX_INTENSITY = 11
     DMX_ROTATING_GOBO_WHEEL = 5
     DMX_ROTATING_GOBO_ROT = 6
+    DMX_FOCUS = 8
 
 
 #static values
@@ -82,6 +84,8 @@ class LyreDevice:
         self.ser.write(str(channel)+"c"+str(int(value))+"w")
         self.ser.flushInput()
 
+    ### MOVEMENT ###
+
     def SetTilt(self,value):
         self.tilt=min(max(value,self.MIN_TILT),self.MAX_TILT)
         self.Send(self.DMX_TILT_1,self.tilt)
@@ -96,9 +100,7 @@ class LyreDevice:
     def IncrementPan(self,value):
         self.SetPan(self.pan+value)
 
-    def SetIntensity(self,value):
-        self.INTENSITY=value
-        self.Send(self.DMX_INTENSITY,value)
+    ### GOBOS ###
 
     def GoboSwitch(self,index):
         self.Send(self.DMX_ROTATING_GOBO_WHEEL,self.GOBOS_INDEX[index])
@@ -106,10 +108,41 @@ class LyreDevice:
     def GoboRotate(self,speed):
         self.Send(self.DMX_ROTATING_GOBO_ROT,118-speed)
 
-    def ColorSwitch(self,index):
-        pass
+    ### SETUP ###
+
+    def SetIntensity(self,value):
+        self.INTENSITY=min(max(value,0),255)
+        self.Send(self.DMX_INTENSITY,self.INTENSITY)
+        print "INTENSITY="+str(self.INTENSITY)
+
+    def IncrementIntensity(self,value):
+        self.SetIntensity(self.INTENSITY+value)
+
+    def IncrementMaxPan(self,value):
+        self.MAX_PAN=min(max(self.MAX_PAN+value,0),255)
+
+    def IncrementMaxTilt(self,value):
+        self.MAX_TILT=min(max(self.MAX_TILT+value,0),255)
+
+    def IncrementMinPan(self,value):
+        self.MIN_PAN=min(max(self.MIN_PAN+value,0),255)
+
+    def IncrementMinTilt(self,value):
+        self.MIN_TILT=min(max(self.MIN_TILT+value,0),255)
 
     def SetFocus(self,value):
+        self.FOCUS=min(max(value,0),255)
+        self.Send(self.DMX_FOCUS,self.FOCUS)
+        print "FOCUS="+str(self.FOCUS)
+
+    def IncrementFocus(self,value):
+        print "ttttttttttttt"
+        self.SetFocus(self.FOCUS+value)
+
+    ###TODO ###
+    
+
+    def ColorSwitch(self,index):
         pass
 
     def Reset(self,value):

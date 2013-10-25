@@ -15,8 +15,8 @@ from LyreDevice import LyreDevice
 #                      Setup                      ##
 ####################################################
 
-SCREEN_WIDTH=1920
-SCREEN_HEIGHT=1080
+SCREEN_WIDTH=800
+SCREEN_HEIGHT=600
 
 PAN_RATIO=0.2
 TILT_RATIO=0.2
@@ -69,7 +69,69 @@ def click():
     sleep(2)
     lyre.GoboRotate(0)
     lyre.GoboSwitch(0)
-    
+
+class menus:
+    MENU_NORMAL="MENU_NORMAL"
+    MENU_LUMINOSITY="MENU_LUMINOSITY"
+    MENU_MAX_PAN="MENU_MAX_PAN"
+    MENU_MIN_PAN="MENU_MIN_PAN"
+    MENU_MAX_TILT="MENU_MAX_TILT"
+    MENU_MIN_TILT="MENU_MIN_TILT"
+    MENU_PAN_RATIO="MENU_PAN_RATIO"
+    MENU_TILT_RATIO="MENU_TILT_RATIO"
+    MENU_FOCUS="MENU_FOCUS"
+
+currentMenu = menus.MENU_NORMAL
+
+def menu(key):
+    global currentMenu, lyre, PAN_RATIO, TILT_RATIO
+    if(key==pygame.K_KP0) : currentMenu = menus.MENU_NORMAL
+    if(key==pygame.K_KP1) : currentMenu = menus.MENU_LUMINOSITY
+    if(key==pygame.K_KP2) : currentMenu = menus.MENU_MAX_PAN
+    if(key==pygame.K_KP3) : currentMenu = menus.MENU_MIN_PAN
+    if(key==pygame.K_KP4) : currentMenu = menus.MENU_MAX_TILT
+    if(key==pygame.K_KP5) : currentMenu = menus.MENU_MIN_TILT
+    if(key==pygame.K_KP6) : currentMenu = menus.MENU_PAN_RATIO
+    if(key==pygame.K_KP7) : currentMenu = menus.MENU_TILT_RATIO
+    if(key==pygame.K_KP8) : currentMenu = menus.MENU_FOCUS
+    # if(key==pygame.K_KP9) : currentMenu = menus.MENU_MIN_TILT
+    print currentMenu
+
+    if(currentMenu==menus.MENU_LUMINOSITY):
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementIntensity(10)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementIntensity(-10)
+
+    if(currentMenu==menus.MENU_MAX_PAN):
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMaxPan(10)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMaxPan(-10)
+        lyre.SetPan(lyre.MAX_PAN)
+
+    if(currentMenu==menus.MENU_MIN_PAN):
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMinPan(10)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMinPan(-10)
+        lyre.SetPan(lyre.MIN_PAN)
+
+    if(currentMenu==menus.MENU_MAX_TILT):
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMaxTilt(10)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMaxTilt(-10)
+        lyre.SetTilt(lyre.MAX_TILT)
+
+    if(currentMenu==menus.MENU_MIN_TILT):
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMinTilt(10)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMinTilt(-10)
+        lyre.SetTilt(lyre.MIN_TILT)
+
+    if(currentMenu==menus.MENU_PAN_RATIO):
+        if(key==pygame.K_KP_PLUS) : PAN_RATIO+=0.01
+        if(key==pygame.K_KP_MINUS) : PAN_RATIO-=0.01
+
+    if(currentMenu==menus.MENU_TILT_RATIO):
+        if(key==pygame.K_KP_PLUS) : TILT_RATIO+=0.01
+        if(key==pygame.K_KP_MINUS) : TILT_RATIO-=0.01
+
+    if(currentMenu==menus.MENU_FOCUS):
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementFocus(5)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementFocus(-5)
 
 while running:
     while True:
@@ -81,13 +143,19 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+            else:
+                menu(event.key)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click()
 
-    x, y = pygame.mouse.get_rel()
-    if (x!=0 or y!=0):
-        move(x,y)
-        sleep(0.025)
-    redraw()
+    if (currentMenu in [menus.MENU_NORMAL,menus.MENU_TILT_RATIO,menus.MENU_PAN_RATIO]):
+        x, y = pygame.mouse.get_rel()
 
-ser.close()
+        # in thoses menues we limit the movement to 1 axe at the time
+        if(currentMenu==menus.MENU_TILT_RATIO):y=0
+        if(currentMenu==menus.MENU_PAN_RATIO):x=0
+
+        if (x!=0 or y!=0):
+            move(x,y)
+            sleep(0.025)
+        redraw()
