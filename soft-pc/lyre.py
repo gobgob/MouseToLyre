@@ -5,80 +5,71 @@ import pygame.mixer
 import serial
 import struct
 import os
-import time
+from time import *
+import ConfigParser
 
-        
+from LyreDevice import LyreDevice
+
 
 ####################################################
 #                      Setup                      ##
 ####################################################
 
-
-MAX_TILT=65535
-MAX_PAN=65535
-MIN_TILT=0
-MIN_PAN=0
-
 SCREEN_WIDTH=1920
 SCREEN_HEIGHT=1080
 
-PAN_RATIO=60
-TILT_RATIO=60
+PAN_RATIO=0.2
+TILT_RATIO=0.2
 
-PAN_CHANNEL=10
-TILT_CHANNEL=11
-
-lyre_pan=(MAX_PAN+MIN_PAN)/2
-lyre_tilt=(MAX_TILT+MIN_TILT)/2
-
+PROGRAMM_PATH=os.path.dirname(os.path.realpath(__file__))
+CONFIG_PATH=PROGRAMM_PATH+"/config.ini"
 ####################################################
 #                      Program                    ##
 ####################################################
 
-bgcolor = 0, 0, 0
-linecolor = 255, 255, 255
+
 running = 1
+
+
+lyre = LyreDevice(CONFIG_PATH)
 
 pygame.font.init()
 pygame.init()
 pygame.mixer.init
-ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-# screen = pygame.display.set_mode((1920, 1080))
-screen = pygame.display.set_mode((1920, 1080),pygame.FULLSCREEN)
-sound = pygame.mixer.Sound(os.path.dirname(os.path.realpath(__file__))+"/criticalstop_short.wav")
+# screen = pygame.display.set_mode((1920, 1080),pygame.FULLSCREEN)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+sound = pygame.mixer.Sound(PROGRAMM_PATH+"/criticalstop_short.wav")
 font = pygame.font.Font(None,30)
 pygame.mouse.set_visible(False)
 
 def redraw():
-    global lyre_pan,lyre_tilt
+    global lyre
+    bgcolor = 0, 0, 0
+    linecolor = 255, 255, 255
     screen.fill(bgcolor)
-    scr_x=(lyre_pan*SCREEN_WIDTH)/MAX_PAN
-    scr_y=(lyre_tilt*SCREEN_HEIGHT)/MAX_TILT
+    scr_y=(lyre.pan*SCREEN_WIDTH)/lyre.MAX_PAN
+    scr_x=(lyre.tilt*SCREEN_HEIGHT)/lyre.MAX_TILT
     pygame.draw.line(screen, linecolor, (scr_x, 0), (scr_x, SCREEN_HEIGHT))
     pygame.draw.line(screen, linecolor, (0, scr_y), (SCREEN_WIDTH, scr_y))
-    text=font.render("pan ="+str(lyre_pan)+" tilt ="+str(lyre_tilt), 1,(255,255,255))
+    text=font.render("pan ="+str(lyre.pan)+" tilt ="+str(lyre.tilt), 1,(255,255,255))
     screen.blit(text, (0, 100))
     text=font.render("  x ="+str(scr_x)+"    y ="+str(scr_y), 1,(255,255,255))
     screen.blit(text, (0, 0))
     pygame.display.flip()
 
-
-def send():
-    global lyre_pan,lyre_tilt,ser
-    ser.write(str(PAN_CHANNEL)+"c")
-    ser.write(str(lyre_pan)+"w")
-    ser.write(str(TILT_CHANNEL)+"c")
-    ser.write(str(lyre_tilt)+"w")
-    while (ser.inWaiting()):
-        print(ser.read())
-
 def move(x,y):
-    global lyre_pan,lyre_tilt
-    lyre_pan=lyre_pan+x*PAN_RATIO
-    lyre_tilt+=y*TILT_RATIO
-    lyre_pan=min(max(lyre_pan,MIN_PAN),MAX_PAN)
-    lyre_tilt=min(max(lyre_tilt,MIN_TILT),MAX_TILT)
-    send()
+    global lyre
+    lyre.IncrementTilt(-x*TILT_RATIO)
+    lyre.IncrementPan(-y*PAN_RATIO)
+
+def click():
+    sound.play()
+    lyre.GoboSwitch(1)
+    lyre.GoboRotate(40)
+    sleep(2)
+    lyre.GoboRotate(0)
+    lyre.GoboSwitch(0)
+    
 
 while running:
     while True:
@@ -91,12 +82,12 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            sound.play()
-            
+            click()
+
     x, y = pygame.mouse.get_rel()
     if (x!=0 or y!=0):
         move(x,y)
-        time.sleep(0.05)
+        sleep(0.025)
     redraw()
 
 ser.close()
