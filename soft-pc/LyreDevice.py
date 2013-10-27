@@ -23,6 +23,10 @@ class LyreDevice:
     INTENSITY=255
     FOCUS=100
 
+    #mouse related, nothing to do there but easier
+    PAN_RATIO=20
+    TILT_RATIO=20
+
     DMX_TILT_1 = 1
     DMX_TILT_2 = 13
     DMX_PAN_1 = 2
@@ -43,15 +47,20 @@ class LyreDevice:
     def LoadConfig(self):
         self.config = ConfigParser.ConfigParser()
         self.config.read(self.configPath)
-        if (not self.config.has_section("LYRE")):
+        try:
+            self.MAX_TILT=int(self.config.get('LYRE', "MAX_TILT"))
+            self.MAX_PAN=int(self.config.get('LYRE', "MAX_PAN"))
+            self.MIN_TILT=int(self.config.get('LYRE', "MIN_TILT"))
+            self.MIN_PAN=int(self.config.get('LYRE', "MIN_PAN"))
+            self.INTENSITY=int(self.config.get('LYRE', "INTENSITY"))
+            self.FOCUS=int(self.config.get('LYRE', "FOCUS"))
+            self.PAN_RATIO=int(self.config.get('LYRE', "PAN_RATIO"))
+            self.TILT_RATIO=int(self.config.get('LYRE', "TILT_RATIO"))
+            self.SetIntensity(self.INTENSITY)
+        except Exception, e:
             self.SaveConfig()
-        self.MAX_TILT=int(self.config.get('LYRE', "MAX_TILT"))
-        self.MAX_PAN=int(self.config.get('LYRE', "MAX_PAN"))
-        self.MIN_TILT=int(self.config.get('LYRE', "MIN_TILT"))
-        self.MIN_PAN=int(self.config.get('LYRE', "MIN_PAN"))
-        self.INTENSITY=int(self.config.get('LYRE', "INTENSITY"))
-        self.FOCUS=int(self.config.get('LYRE', "FOCUS"))
-        self.SetIntensity(self.INTENSITY)
+            self.LoadConfig()
+
 
     def SaveConfig(self):
         cfgfile = open(self.configPath,'w')
@@ -63,6 +72,8 @@ class LyreDevice:
         self.config.set('LYRE', "MIN_PAN", self.MIN_PAN)
         self.config.set('LYRE', "INTENSITY", self.INTENSITY)
         self.config.set('LYRE', "FOCUS", self.FOCUS)
+        self.config.set('LYRE', "PAN_RATIO", self.PAN_RATIO)
+        self.config.set('LYRE', "TILT_RATIO", self.TILT_RATIO)
         self.config.write(cfgfile)
         cfgfile.close()
 

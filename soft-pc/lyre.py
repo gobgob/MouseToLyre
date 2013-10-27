@@ -59,8 +59,8 @@ def redraw():
 
 def move(x,y):
     global lyre
-    lyre.IncrementTilt(-x*TILT_RATIO)
-    lyre.IncrementPan(-y*PAN_RATIO)
+    lyre.IncrementTilt(-x*lyre.TILT_RATIO)
+    lyre.IncrementPan(-y*lyre.PAN_RATIO)
 
 def click():
     sound.play()
@@ -84,7 +84,7 @@ class menus:
 currentMenu = menus.MENU_NORMAL
 
 def menu(key):
-    global currentMenu, lyre, PAN_RATIO, TILT_RATIO
+    global currentMenu, lyre
     if(key==pygame.K_KP0) : currentMenu = menus.MENU_NORMAL
     if(key==pygame.K_KP1) : currentMenu = menus.MENU_LUMINOSITY
     if(key==pygame.K_KP2) : currentMenu = menus.MENU_MAX_PAN
@@ -122,12 +122,12 @@ def menu(key):
         lyre.SetTilt(lyre.MIN_TILT)
 
     if(currentMenu==menus.MENU_PAN_RATIO):
-        if(key==pygame.K_KP_PLUS) : PAN_RATIO+=0.01
-        if(key==pygame.K_KP_MINUS) : PAN_RATIO-=0.01
+        if(key==pygame.K_KP_PLUS) : lyre.PAN_RATIO+=1
+        if(key==pygame.K_KP_MINUS) : lyre.PAN_RATIO-=1
 
     if(currentMenu==menus.MENU_TILT_RATIO):
-        if(key==pygame.K_KP_PLUS) : TILT_RATIO+=0.01
-        if(key==pygame.K_KP_MINUS) : TILT_RATIO-=0.01
+        if(key==pygame.K_KP_PLUS) : lyre.TILT_RATIO+=1
+        if(key==pygame.K_KP_MINUS) : lyre.TILT_RATIO-=1
 
     if(currentMenu==menus.MENU_FOCUS):
         if(key==pygame.K_KP_PLUS) : lyre.IncrementFocus(5)
