@@ -18,8 +18,8 @@ from LyreDevice import LyreDevice
 SCREEN_WIDTH=800
 SCREEN_HEIGHT=600
 
-PAN_RATIO=0.2
-TILT_RATIO=0.2
+PAN_RATIO=20
+TILT_RATIO=20
 
 PROGRAMM_PATH=os.path.dirname(os.path.realpath(__file__))
 CONFIG_PATH=PROGRAMM_PATH+"/config.ini"
@@ -102,23 +102,23 @@ def menu(key):
         if(key==pygame.K_KP_MINUS) : lyre.IncrementIntensity(-10)
 
     if(currentMenu==menus.MENU_MAX_PAN):
-        if(key==pygame.K_KP_PLUS) : lyre.IncrementMaxPan(10)
-        if(key==pygame.K_KP_MINUS) : lyre.IncrementMaxPan(-10)
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMaxPan(100)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMaxPan(-100)
         lyre.SetPan(lyre.MAX_PAN)
 
     if(currentMenu==menus.MENU_MIN_PAN):
-        if(key==pygame.K_KP_PLUS) : lyre.IncrementMinPan(10)
-        if(key==pygame.K_KP_MINUS) : lyre.IncrementMinPan(-10)
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMinPan(100)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMinPan(-100)
         lyre.SetPan(lyre.MIN_PAN)
 
     if(currentMenu==menus.MENU_MAX_TILT):
-        if(key==pygame.K_KP_PLUS) : lyre.IncrementMaxTilt(10)
-        if(key==pygame.K_KP_MINUS) : lyre.IncrementMaxTilt(-10)
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMaxTilt(100)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMaxTilt(-100)
         lyre.SetTilt(lyre.MAX_TILT)
 
     if(currentMenu==menus.MENU_MIN_TILT):
-        if(key==pygame.K_KP_PLUS) : lyre.IncrementMinTilt(10)
-        if(key==pygame.K_KP_MINUS) : lyre.IncrementMinTilt(-10)
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementMinTilt(100)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementMinTilt(-100)
         lyre.SetTilt(lyre.MIN_TILT)
 
     if(currentMenu==menus.MENU_PAN_RATIO):

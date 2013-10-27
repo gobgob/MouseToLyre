@@ -15,18 +15,18 @@ class LyreDevice:
     tilt=0
 
 # setup values
-    MAX_TILT=255
-    MAX_PAN=255
+    MAX_TILT=32000
+    MAX_PAN=32000
     MIN_TILT=0
     MIN_PAN=0
 
-    INTENSITY=20
-    FOCUS=20
+    INTENSITY=255
+    FOCUS=100
 
     DMX_TILT_1 = 1
-    DMX_TILT_2 = 14
+    DMX_TILT_2 = 13
     DMX_PAN_1 = 2
-    DMX_PAN_2 = 13
+    DMX_PAN_2 = 14
     DMX_INTENSITY = 11
     DMX_ROTATING_GOBO_WHEEL = 5
     DMX_ROTATING_GOBO_ROT = 6
@@ -95,14 +95,20 @@ class LyreDevice:
 
     def SetTilt(self,value):
         self.tilt=min(max(value,self.MIN_TILT),self.MAX_TILT)
-        self.Send(self.DMX_TILT_1,self.tilt)
+        tilt_highbits = (int(self.tilt)&0xff00)>>8
+        tilt_lowbits = (int(self.tilt)&0x00ff)
+        self.Send(self.DMX_TILT_1,tilt_highbits)
+        self.Send(self.DMX_TILT_2,tilt_lowbits)
 
     def IncrementTilt(self,value):
         self.SetTilt(self.tilt+value)
     
     def SetPan(self,value):
         self.pan=min(max(value,self.MIN_PAN),self.MAX_PAN)
-        self.Send(self.DMX_PAN_1,self.pan)
+        pan_highbits = (int(self.pan)&0xff00)>>8
+        pan_lowbits = (int(self.pan)&0x00ff)
+        self.Send(self.DMX_PAN_1,pan_highbits)
+        self.Send(self.DMX_PAN_2,pan_lowbits)
 
     def IncrementPan(self,value):
         self.SetPan(self.pan+value)
@@ -126,16 +132,16 @@ class LyreDevice:
         self.SetIntensity(self.INTENSITY+value)
 
     def IncrementMaxPan(self,value):
-        self.MAX_PAN=min(max(self.MAX_PAN+value,0),255)
+        self.MAX_PAN=min(max(self.MAX_PAN+value,0),65535)
 
     def IncrementMaxTilt(self,value):
-        self.MAX_TILT=min(max(self.MAX_TILT+value,0),255)
+        self.MAX_TILT=min(max(self.MAX_TILT+value,0),65535)
 
     def IncrementMinPan(self,value):
-        self.MIN_PAN=min(max(self.MIN_PAN+value,0),255)
+        self.MIN_PAN=min(max(self.MIN_PAN+value,0),65535)
 
     def IncrementMinTilt(self,value):
-        self.MIN_TILT=min(max(self.MIN_TILT+value,0),255)
+        self.MIN_TILT=min(max(self.MIN_TILT+value,0),65535)
 
     def SetFocus(self,value):
         self.FOCUS=min(max(value,0),255)
