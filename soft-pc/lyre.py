@@ -133,6 +133,8 @@ def menu(key):
         if(key==pygame.K_KP_PLUS) : lyre.IncrementFocus(5)
         if(key==pygame.K_KP_MINUS) : lyre.IncrementFocus(-5)
 
+    lyre.SaveConfig()
+
 while running:
     while True:
         event = pygame.event.poll()

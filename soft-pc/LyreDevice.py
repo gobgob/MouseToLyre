@@ -44,18 +44,25 @@ class LyreDevice:
         self.config = ConfigParser.ConfigParser()
         self.config.read(self.configPath)
         if (not self.config.has_section("LYRE")):
-            self.config.add_section("LYRE")
-            self.config.set('LYRE', "MAX_TILT", self.MAX_TILT)
-            self.config.set('LYRE', "MAX_PAN", self.MAX_PAN)
-            self.config.set('LYRE', "MIN_TILT", self.MIN_TILT)
-            self.config.set('LYRE', "MIN_PAN", self.MIN_PAN)
-            self.config.set('LYRE', "INTENSITY", self.INTENSITY)
             self.SaveConfig()
-
+        self.MAX_TILT=int(self.config.get('LYRE', "MAX_TILT"))
+        self.MAX_PAN=int(self.config.get('LYRE', "MAX_PAN"))
+        self.MIN_TILT=int(self.config.get('LYRE', "MIN_TILT"))
+        self.MIN_PAN=int(self.config.get('LYRE', "MIN_PAN"))
+        self.INTENSITY=int(self.config.get('LYRE', "INTENSITY"))
+        self.FOCUS=int(self.config.get('LYRE', "FOCUS"))
         self.SetIntensity(self.INTENSITY)
 
     def SaveConfig(self):
         cfgfile = open(self.configPath,'w')
+        if (not self.config.has_section("LYRE")):
+            self.config.add_section("LYRE")
+        self.config.set('LYRE', "MAX_TILT", self.MAX_TILT)
+        self.config.set('LYRE', "MAX_PAN", self.MAX_PAN)
+        self.config.set('LYRE', "MIN_TILT", self.MIN_TILT)
+        self.config.set('LYRE', "MIN_PAN", self.MIN_PAN)
+        self.config.set('LYRE', "INTENSITY", self.INTENSITY)
+        self.config.set('LYRE', "FOCUS", self.FOCUS)
         self.config.write(cfgfile)
         cfgfile.close()
 
@@ -136,12 +143,10 @@ class LyreDevice:
         print "FOCUS="+str(self.FOCUS)
 
     def IncrementFocus(self,value):
-        print "ttttttttttttt"
         self.SetFocus(self.FOCUS+value)
 
     ###TODO ###
     
-
     def ColorSwitch(self,index):
         pass
 
