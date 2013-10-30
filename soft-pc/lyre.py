@@ -3,41 +3,34 @@
 import pygame
 import pygame.mixer
 import serial
-import struct
 import os
+import sys
 from time import *
 import ConfigParser
 
 from LyreDevice import LyreDevice
 
 
-####################################################
-#                      Setup                      ##
-####################################################
-
-SCREEN_WIDTH=800
-SCREEN_HEIGHT=600
-
-PAN_RATIO=20
-TILT_RATIO=20
-
 PROGRAMM_PATH=os.path.dirname(os.path.realpath(__file__))
 CONFIG_PATH=PROGRAMM_PATH+"/config.ini"
-####################################################
-#                      Program                    ##
-####################################################
-
 
 running = 1
-
 
 lyre = LyreDevice(CONFIG_PATH)
 
 pygame.font.init()
 pygame.init()
 pygame.mixer.init
-# screen = pygame.display.set_mode((1920, 1080),pygame.FULLSCREEN)
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+if (len(sys.argv)>1):
+    SCREEN_WIDTH=1920
+    SCREEN_HEIGHT=1080
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.FULLSCREEN)
+else:
+    SCREEN_WIDTH=1280
+    SCREEN_HEIGHT=1024
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 sound = pygame.mixer.Sound(PROGRAMM_PATH+"/criticalstop_short.wav")
 font = pygame.font.Font(None,30)
 pygame.mouse.set_visible(False)
