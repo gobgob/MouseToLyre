@@ -24,8 +24,8 @@ pygame.init()
 pygame.mixer.init
 
 if (len(sys.argv)>1):
-    SCREEN_WIDTH=1920
-    SCREEN_HEIGHT=1080
+    SCREEN_WIDTH=480
+    SCREEN_HEIGHT=234
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),pygame.FULLSCREEN)
 else:
     SCREEN_WIDTH=1280
