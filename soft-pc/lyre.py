@@ -144,7 +144,8 @@ while running:
             else:
                 menu(event.key)
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            click()
+            if (event.button==1):
+                click()
 
     if (currentMenu in [menus.MENU_NORMAL,menus.MENU_TILT_RATIO,menus.MENU_PAN_RATIO]):
         x, y = pygame.mouse.get_rel()
