@@ -26,6 +26,7 @@ class LyreDevice:
     #mouse related, nothing to do there but easier
     PAN_RATIO=20
     TILT_RATIO=20
+    DETECT_CLICK=True
 
     DMX_TILT_1 = 1
     DMX_TILT_2 = 13
@@ -56,6 +57,7 @@ class LyreDevice:
             self.FOCUS=int(self.config.get('LYRE', "FOCUS"))
             self.PAN_RATIO=int(self.config.get('LYRE', "PAN_RATIO"))
             self.TILT_RATIO=int(self.config.get('LYRE', "TILT_RATIO"))
+            self.DETECT_CLICK=bool(self.config.get('LYRE',"DETECT_CLICK"))
             self.SetIntensity(self.INTENSITY)
             self.SetFocus(self.FOCUS)
         except Exception, e:
@@ -75,6 +77,7 @@ class LyreDevice:
         self.config.set('LYRE', "FOCUS", self.FOCUS)
         self.config.set('LYRE', "PAN_RATIO", self.PAN_RATIO)
         self.config.set('LYRE', "TILT_RATIO", self.TILT_RATIO)
+        self.config.set('LYRE', "DETECT_CLICK", self.DETECT_CLICK)
         self.config.write(cfgfile)
         cfgfile.close()
 

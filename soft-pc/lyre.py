@@ -60,11 +60,12 @@ def move(x,y):
 
 def click():
     sound.play()
-    lyre.GoboSwitch(6)
-    lyre.GoboRotate(40)
-    sleep(2)
-    lyre.GoboRotate(0)
-    lyre.GoboSwitch(5)
+    if (lyre.DETECT_CLICK):
+        lyre.GoboSwitch(6)
+        lyre.GoboRotate(40)
+        sleep(2)
+        lyre.GoboRotate(0)
+        lyre.GoboSwitch(5)
 
 class menus:
     MENU_NORMAL="MENU_NORMAL"
@@ -76,6 +77,7 @@ class menus:
     MENU_PAN_RATIO="MENU_PAN_RATIO"
     MENU_TILT_RATIO="MENU_TILT_RATIO"
     MENU_FOCUS="MENU_FOCUS"
+    DETECT_CLICK="DETECT_CLICK"
 
 currentMenu = menus.MENU_NORMAL
 
@@ -90,7 +92,7 @@ def menu(key):
     if(key==pygame.K_KP6) : currentMenu = menus.MENU_PAN_RATIO
     if(key==pygame.K_KP7) : currentMenu = menus.MENU_TILT_RATIO
     if(key==pygame.K_KP8) : currentMenu = menus.MENU_FOCUS
-    # if(key==pygame.K_KP9) : currentMenu = menus.MENU_MIN_TILT
+    if(key==pygame.K_KP9) : currentMenu = menus.DETECT_CLICK
     print currentMenu
 
     if(currentMenu==menus.MENU_LUMINOSITY):
@@ -128,6 +130,10 @@ def menu(key):
     if(currentMenu==menus.MENU_FOCUS):
         if(key==pygame.K_KP_PLUS) : lyre.IncrementFocus(1)
         if(key==pygame.K_KP_MINUS) : lyre.IncrementFocus(-1)
+
+    if(currentMenu==menus.DETECT_CLICK):
+        if(key==pygame.K_KP_PLUS) : lyre.DETECT_CLICK=True
+        if(key==pygame.K_KP_MINUS) : lyre.DETECT_CLICK=False
 
     lyre.SaveConfig()
 
