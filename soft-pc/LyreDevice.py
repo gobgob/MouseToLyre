@@ -57,6 +57,7 @@ class LyreDevice:
             self.PAN_RATIO=int(self.config.get('LYRE', "PAN_RATIO"))
             self.TILT_RATIO=int(self.config.get('LYRE', "TILT_RATIO"))
             self.SetIntensity(self.INTENSITY)
+            self.SetFocus(self.FOCUS)
         except Exception, e:
             self.SaveConfig()
             self.LoadConfig()
