@@ -17,6 +17,7 @@ CONFIG_PATH=PROGRAMM_PATH+"/config.ini"
 running = 1
 
 lyre = LyreDevice(CONFIG_PATH)
+lyre.GoboSwitch(5)
 
 pygame.font.init()
 pygame.init()
@@ -57,11 +58,11 @@ def move(x,y):
 
 def click():
     sound.play()
-    lyre.GoboSwitch(1)
+    lyre.GoboSwitch(6)
     lyre.GoboRotate(40)
     sleep(2)
     lyre.GoboRotate(0)
-    lyre.GoboSwitch(0)
+    lyre.GoboSwitch(5)
 
 class menus:
     MENU_NORMAL="MENU_NORMAL"
@@ -123,8 +124,8 @@ def menu(key):
         if(key==pygame.K_KP_MINUS) : lyre.TILT_RATIO-=1
 
     if(currentMenu==menus.MENU_FOCUS):
-        if(key==pygame.K_KP_PLUS) : lyre.IncrementFocus(5)
-        if(key==pygame.K_KP_MINUS) : lyre.IncrementFocus(-5)
+        if(key==pygame.K_KP_PLUS) : lyre.IncrementFocus(1)
+        if(key==pygame.K_KP_MINUS) : lyre.IncrementFocus(-1)
 
     lyre.SaveConfig()
 
