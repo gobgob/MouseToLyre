@@ -36,6 +36,8 @@ sound = pygame.mixer.Sound(PROGRAMM_PATH+"/criticalstop_short.wav")
 font = pygame.font.Font(None,30)
 pygame.mouse.set_visible(False)
 
+sound.play()
+
 def redraw():
     global lyre
     bgcolor = 0, 0, 0
