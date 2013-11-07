@@ -57,7 +57,7 @@ class LyreDevice:
             self.FOCUS=int(self.config.get('LYRE', "FOCUS"))
             self.PAN_RATIO=int(self.config.get('LYRE', "PAN_RATIO"))
             self.TILT_RATIO=int(self.config.get('LYRE', "TILT_RATIO"))
-            self.DETECT_CLICK=bool(self.config.get('LYRE',"DETECT_CLICK"))
+            self.DETECT_CLICK=(self.config.get('LYRE',"DETECT_CLICK")=="True")
             self.SetIntensity(self.INTENSITY)
             self.SetFocus(self.FOCUS)
         except Exception, e:
